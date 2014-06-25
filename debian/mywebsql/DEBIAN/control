@@ -1,0 +1,12 @@
+Package: mywebsql
+Version: 0.6
+Architecture: all
+Maintainer: OpenMediaVault Plugin Developers <plugins@omv-extras.org>
+Installed-Size: 4526
+Depends: openmediavault (>= 0.6.0.13), openmediavault-mysql (>= 0.6)
+Section: net
+Priority: optional
+Description: MyWebSQL
+ MyWebSql is an open source, web based, WYSIWYG mysql client written in PHP. It
+ utilizes modern day technologies and browsers to provide a fast, intuitive querying
+ and editing interface to the mysql databases.
