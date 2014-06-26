@@ -36,7 +36,7 @@ ehthumbs.db
 Desktop.ini
 
 # OpenMediaVault / Debian
-debian/openmediavault-*
+debian/mywebsql*
 debian/files
 debian/*.debhelper.log
 debian/*.debhelper
