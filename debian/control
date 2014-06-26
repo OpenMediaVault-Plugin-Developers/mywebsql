@@ -7,7 +7,7 @@ Standards-Version: 3.9.3
 
 Package: mywebsql
 Architecture: all
-Depends: ${misc:Depends}, openmediavault (>= 0.6.0.13), openmediavault-mysql (>= 0.6)
+Depends: ${misc:Depends}, openmediavault (>= 0.6.0.13), openmediavault-mysql (>= 1.0.5)
 Priority: optional
 Description: MyWebSQL
  MyWebSql is an open source, web based, WYSIWYG mysql client written in PHP. It
