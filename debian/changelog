@@ -1,6 +1,5 @@
-mywebsql (0.6) UNRELEASED; urgency=low
+mywebsql (0.6) unstable; urgency=low
 
   * Initial release
 
- -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 23 Jun 2014 16:34:02 -0500
- 
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Thu, 26 Jun 2014 06:54:34 -0500
