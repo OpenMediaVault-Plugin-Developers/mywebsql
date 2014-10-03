@@ -4,7 +4,7 @@
  *
  * @file:      modules/auth.php
  * @author     Samnan ur Rehman
- * @copyright  (c) 2008-2012 Samnan ur Rehman
+ * @copyright  (c) 2008-2014 Samnan ur Rehman
  * @web        http://mywebsql.net
  * @license    http://mywebsql.net/license
  */
@@ -296,10 +296,10 @@
 							$driver =  extension_loaded('mysqli') ? 'mysqli' : 'mysql5';
 						break;
 					case 'pgsql':
-						$driver = in_array('mysql', $allowed_types) ? 'pgsql' : '';
+						$driver = in_array('pgsql', $allowed_types) ? 'pgsql' : '';
 						break;
 					case 'sqlite':
-						$driver = in_array('mysql', $allowed_types) ? 'sqlite' : '';
+						$driver = in_array('sqlite', $allowed_types) ? 'sqlite' : '';
 						break;
 				}
 				if ($address && $driver) {
