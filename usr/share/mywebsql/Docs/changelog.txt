@@ -1,4 +1,29 @@
 -------------------------------
+version 3.6
+-------------------------------
+Updates:
+- Edit mode updates:
+	for enum/boolean fields, datalist is available to choose from
+	date fields can now be updated with datepicker
+- fixed results header for better navigation and data management
+- .sqlite3 is now recognized as valid sqlite database extension
+- improved in-place editing visual styles
+- SQLite and SQLite3 library improvements for record editing functionality
+- Added SQL editor hotkeys:
+	Ctrl+Up -> Increase text size
+	Ctrl+Down -> Decrease text size
+	Ctrl+Shift+Del -> Clear SQL editor
+- Warnings are now shown in message pane that occur during query execution
+Bugfixes:
+- Enum and set field values handling with special characters
+General:
+- Results for data queries and other types of queries are shown separately
+- Cleaned up themes structure, to simply theme modification and creation
+- Aero theme is removed from the package
+- Reduced package size due to removal / cleanup of various javascript code
+- Other lots of minor improvements in various areas of application frontend / backend
+
+-------------------------------
 version 3.5
 -------------------------------
 Updates:

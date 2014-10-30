@@ -12,12 +12,12 @@
 	function processRequest(&$db) {
 		$type = v($_REQUEST["id"]);
 		$name = v($_REQUEST["name"]);
-		
+
 		if (!$name) {
 			createErrorGrid($db, '');
 			return;
 		}
-		
+
 		if ($db->truncateTable($name)) {
 			createInfoGrid($db, $db->getLastQuery());
 		}

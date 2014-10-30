@@ -8,16 +8,16 @@
  * @web        http://mywebsql.net
  * @license    http://mywebsql.net/license
  */
- 
+
 	function processRequest(&$db) {
 		$type = v($_REQUEST["id"]);
 		$name = v($_REQUEST["name"]);
-		
+
 		if (!$name) {
 			createErrorGrid($db, '');
 			return;
 		}
-		
+
 		$success = $db->dropObject($name, $type);
 		if ($success) {
 			Session::set('db', 'altered', true);

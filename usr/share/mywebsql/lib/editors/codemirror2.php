@@ -34,5 +34,5 @@
 				onLoad : function() { '.$init.' }
 			});';
 	}
-	
+
 ?>

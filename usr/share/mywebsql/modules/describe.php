@@ -14,9 +14,9 @@
 			echo view('invalid_request');
 			return;
 		}
-		
+
 		if ( $db->getTableDescription( $_REQUEST['name'] ) )
 			createSimpleGrid($db, __('Table Description').': ['.htmlspecialchars(getDbName()).']');
 	}
-	
+
 ?>

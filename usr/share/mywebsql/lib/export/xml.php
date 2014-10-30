@@ -18,20 +18,20 @@ define("CLASS_EXPORT_XML_INCLUDED", "1");
 class Export_xml {
 	var $db;
 	var $options;
-	
+
 	function __construct(&$db, $options) {
 		$this->db = $db;
 		$this->options = $options;
 	}
-	
+
 	function createHeader($field_info) {
 		return "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<data>\n";
 	}
-	
+
 	function createFooter($field_info) {
 		return "</data>";
 	}
-	
+
 	function createLine($row, $field_info) {
 		$x = count($row);
 		$res = "<row>\n";

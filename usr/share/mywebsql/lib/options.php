@@ -13,12 +13,12 @@
 if (!defined("CLASS_OPTIONS_INCLUDED"))
 {
 	define("CLASS_OPTIONS_INCLUDED", "1");
-	
+
 	class Options {
 		static function set($name, $value) {
 			$_COOKIE[$name] = $value;
 		}
-		
+
 		static function get($name, $default = '') {
 			$var = isset($_COOKIE[$name]) ? $_COOKIE[$name] : $default;
 			return $var;

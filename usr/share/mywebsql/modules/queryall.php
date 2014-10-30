@@ -11,12 +11,12 @@
 
 	function processRequest(&$db) {
 		$query = v($_REQUEST["query"]);
-		
+
 		if (!$query) {
 			createErrorGrid($db, $query);
 			return;
 		}
-		
+
 		//Session::set('select', 'query', $query);
 
 		$temp = tmpfile();

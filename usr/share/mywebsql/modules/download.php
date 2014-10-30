@@ -220,35 +220,35 @@
 			$statement = str_replace($matches[1], "", $statement);
 		return $statement;
 	}
-	
+
 	function stripTableType($statement) {
 		preg_match("/.*\).*(ENGINE=[a-zA-Z]+ )/", $statement, $matches);
 		if (isset($matches[1]))
 			$statement = str_replace($matches[1], "", $statement);
 		return $statement;
 	}
-	
+
 	function stripTableCharset($statement) {
 		preg_match("/.*\).*(DEFAULT\sCHARSET=[a-zA-Z0-9]+)/", $statement, $matches);
 		if (isset($matches[1]))
 			$statement = str_replace($matches[1], "", $statement);
 		return $statement;
 	}
-	
+
 	// flattens table names by combining schema and table name together (if required)
 	function flattenTableNames( $arr ) {
 		foreach( $arr as $val ) {
 			if ( !is_array ($val) )
 				return $arr;
 		}
-		
+
 		$ret = array();
 		foreach( $arr as $schema => $tables ) {
 			foreach( $tables as $table ) {
 				$ret[] = $schema . '.' . $table;
 			}
 		}
-		
+
 		return $ret;
 	}
 ?>

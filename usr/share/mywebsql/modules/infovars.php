@@ -14,5 +14,5 @@
 			createSimpleGrid($db, __('Server Variables'));
 		}
 	}
-	
+
 ?>

@@ -22,7 +22,7 @@
 
 			$type = $_REQUEST["id"];
 			$name = $_REQUEST["name"];
-			
+
 			$cmd = $db->getCreateCommand($type, $name);
 			$cmd = sanitizeCreateCommand($type, $cmd);
 			//$tm = $db->getQueryTime();

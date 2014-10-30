@@ -9,7 +9,7 @@
  * @web        http://mywebsql.net
  * @license    http://mywebsql.net/license
  */
- 
+
 
 if (defined("CLASS_IMPORT_TXT_INCLUDED"))
 	return true;

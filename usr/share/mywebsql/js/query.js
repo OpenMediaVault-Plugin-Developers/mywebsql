@@ -87,18 +87,18 @@ function queryDelete() {
 
 	checked.prop('checked', false);
 	$('#dataTable input.check-all').prop('checked', false);
-	
+
 	$(discardRows).each(function() {
 		this.remove();
 	});
-	
+
 	// return or execute queries
 	if (arguments.length > 0 && arguments[0] == true)
 		return qBig;
 
 	showNavBtns('query', 'queryall');
 	// do we have any live records to delete, or only discardables
-	if (qBig != "")	
+	if (qBig != "")
 		wrkfrmSubmit("queryall", "", "", qBig);
 }
 
@@ -106,7 +106,7 @@ function querySave() {
 	editRows = $('#dataTable tbody tr.x').add('#dataTable tbody tr.n');
 	if (editRows.length == 0)
 		return "";
-	
+
 	qBig = "";
 	editRows.each(function() {
 		newRecord = $(this).hasClass('n');
@@ -139,11 +139,11 @@ function querySave() {
 	});
 
 	$('#dataTable tbody .x').add('#dataTable tbody .n').removeClass('x n').data('edit', null);
-	
+
 	// return or execute queries
 	if (arguments.length > 0 && arguments[0] == true)
 		return qBig;
-	
+
 	showNavBtns('query', 'queryall');
 	wrkfrmSubmit("queryall", "", "", qBig);
 }
@@ -193,16 +193,16 @@ function queryCopyRecord() {
 			is_null = fieldInfo[i].autoinc || current.find("span.blob").length;
 			if (is_null)
 				current.text("NULL").addClass("tnl");
-	
+
 			// if text data, copy it internally
 			txt = current.find("span.d").length ? current.find("span.d").text() : current.html();
 			data = {'setNull':is_null, 'value':txt};
 			current.data('edit', data);
 		}
-	
+
 		$('#dataTable tbody').append(row);
 	});
-	
+
 	checked.prop('checked', false);
 	$('#dataTable input.check-all').prop('checked', false);
 	showNavBtn('update', 'gensql');
@@ -217,7 +217,7 @@ function queryRefresh() {
 		jAlert(__("Failed to refresh the results."), __("Refresh results"), function() { focusEditor(); });
 		return false;
 	}
-		
+
 	wrkfrmSubmit("query", "", "", currentQuery);
 	focusEditor();
 }
@@ -231,7 +231,7 @@ function queryRefresh() {
 		jAlert(__("Please type in one or more queries in the sql editor!"), __("Format SQL"), function() { focusEditor(); });
 		return;
 	}
-	
+
 	editor = currentEditor();
 	range = { from: editor.getCursor(true), to: editor.getCursor(false) };
 	editor.autoFormatRange(range.from, range.to);
@@ -250,7 +250,6 @@ function transferResultMessage(num, tm, msg) {
 	resultInfo = "";
 	$("#messages-div").html(getResults(1));
 	document.getElementById("timeCounter").innerHTML = tm;
-	document.getElementById("messageContainer").innerHTML = msg;
 
 	$(".ui-layout-data-center").tabs('select', 1);
 	$("#messages-div").prop("scrollTop", 0).prop("scrollLeft", 0);
@@ -273,6 +272,9 @@ function transferResultMessage(num, tm, msg) {
 function transferInfoMessage() {
 	resultInfo = "";
 	$("#info-div").html(getResults(1));
+	$("#tab-info > .message").remove();
+	$("#info-div .message").clone().prependTo("#tab-info");
+	$("#info-div .message").remove();
 
 	$(".ui-layout-data-center").tabs('select', 2);
 	$("#info-div").attr("scrollTop", 0).prop("scrollLeft", 0);
@@ -293,10 +295,13 @@ function transferInfoMessage() {
 
 	setPageStatus(false);
 	showNavBtns('query', 'queryall');
-	
+
 	$("#quick-info-search").bind('keyup', function() {
 		$("#infoTable").setSearchFilter( $(this).val() );
+		resizeTableHeader('info');
 	});
+		
+	resizeTableHeader('info');
 }
 
 function transferResultGrid(num, tm, msg) {
@@ -319,6 +324,8 @@ function transferResultGrid(num, tm, msg) {
 
 	$(".ui-layout-data-center").tabs('select', 0);
 	$("#results-div").prop("scrollTop", 0).prop("scrollLeft", 0);
+		
+
 
 	if (totalPages > 1) {
 		str = __('Results page:') + '&nbsp;';
@@ -335,7 +342,9 @@ function transferResultGrid(num, tm, msg) {
 
 	setPageStatus(false);
 	editTableName == "" ? showNavBtns('query', 'queryall') : showNavBtns('addrec', 'query', 'queryall');
-
+		
+	// sometimes the cloned header has width problem, so to make sure we always see nice header, we resize it just after creating it
+	resizeTableHeader('data');
 }
 
 function getFieldInfo(num) {
@@ -427,7 +436,7 @@ function loadUserPreferences() {
 
 /* ******************************** */
 function resultSelectAll() {
-	check = $('#dataTable input.check-all').prop('checked');
+	check = $('#dataHeader input.check-all').prop('checked');
 	$('#dataTable input').prop('checked', check);
 	check ? showNavBtn('delete', 'gensql') : hideNavBtn('delete', 'gensql');
 }
@@ -480,12 +489,8 @@ function setupResults() {
 
 	if (editTableName != "")
 		$('#dataTable input').not('check-all').click(function() { showNavBtn('delete', 'copyrec', 'gensql'); });
-	
-	//$("#dataTable").contextMenu(getDataMenu);
-}
 
-function postSortTable() {
-//	$('#dataTable input:checked').prop('checked', false);
+	//$("#dataTable").contextMenu(getDataMenu);
 }
 
 function goPage(num) {

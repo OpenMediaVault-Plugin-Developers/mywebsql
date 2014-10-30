@@ -35,11 +35,11 @@ class UserManager {
 
 	public function add($userName, $host = '%', $password = '') {
 		$user = User::factory( $this->legacy );
-		
+
 		$user->userName = $userName;
 		$user->host     = $host;
 		$user->password = $password;
-		
+
 		return $user->add();
 	}
 
@@ -48,7 +48,7 @@ class UserManager {
 
 		$user->userName = $currUsername;
 		$user->host     = $currHost;
-		
+
 		return $user->update( $newUsername, $newHost );
 	}
 
@@ -57,7 +57,7 @@ class UserManager {
 
 		$user->userName = $userName;
 		$user->host     = $host;
-		
+
 		return $user->updatePassword( $newPassword );
 	}
 
@@ -66,7 +66,7 @@ class UserManager {
 
 		$user->userName = $userName;
 		$user->host     = $host;
-		
+
 		return $user->delete();
 	}
 

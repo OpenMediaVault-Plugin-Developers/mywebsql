@@ -11,7 +11,7 @@
 
 	function processRequest(&$db) {
 		$p = v($_REQUEST["p"], 'queries');
-		
+
 		$pages = array(
 						"queries"=>'Executing queries',
 						"results"=>'Working with results',
@@ -31,7 +31,7 @@
 			'PROJECT_SITEURL' => PROJECT_SITEURL,
 			'CONTENT' => $contents
 		);
-		
+
 		echo view('help', $replace, array('pages' => $pages, 'page' => $p) );
 	}
 

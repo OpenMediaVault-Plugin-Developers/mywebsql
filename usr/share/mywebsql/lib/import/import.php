@@ -16,7 +16,7 @@ if (defined("CLASS_IMPORT_INCLUDED"))
 define("CLASS_IMPORT_INCLUDED", "1");
 
 class DataImport {
-	static $types = array('csv', 'txt'); 
+	static $types = array('csv', 'txt');
 
 	public static function types() {
 		return (self::$types);
@@ -25,7 +25,7 @@ class DataImport {
 	function factory(&$db, $type) {
 		$class = 'Import_' . strtolower($type);
 		require_once( dirname(__FILE__) . '/' . strtolower($type) . '.php');
-		
+
 		return new $class($db);
 	}
 }

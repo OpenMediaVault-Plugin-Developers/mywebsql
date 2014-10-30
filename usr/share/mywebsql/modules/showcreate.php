@@ -15,13 +15,13 @@
 		Session::del('select', 'ukey');
 		Session::del('select', 'mkey');
 		Session::del('select', 'unique_table');
-		
+
 		Session::set('select', 'result', array());
 		$extraMsg = '';
 
 		$type = $_REQUEST["id"];
 		$name = $_REQUEST["name"];
-		
+
 		$cmd = $db->getCreateCommand($type, $name);
 		$cmd = sanitizeCreateCommand($type, $cmd);
 		$tm = $db->getQueryTime();

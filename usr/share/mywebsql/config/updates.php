@@ -12,11 +12,11 @@
 
 	// you can change how frequently a 'background' check is done by comparing local
 	// and available online version of MyWebSQL
-	
+
 	// if true, new version will be checked for and notified on main interface
 	$AUTOUPDATE_CHECK = true;
-	
+
 	// days of week on which auto update will run itself
 	$AUTOUPDATE_DAYS = array('Mon');
-	
+
 ?>

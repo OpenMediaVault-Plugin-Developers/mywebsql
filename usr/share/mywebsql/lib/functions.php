@@ -178,7 +178,7 @@
 	function phpCheck( $ver ) {
 		return version_compare(PHP_VERSION, $ver, '>=');
 	}
-	
+
 	function get_backup_filename( $compression, $filename ) {
 		include_once(BASE_PATH . "/config/backups.php");
 		$file = '';
@@ -202,7 +202,7 @@
 		$matches = '[]/\\\?\*:<>|"\'';
 		if ( strpbrk($file, $matches) )
 			return false;
-		
+
 		return  BACKUP_FOLDER . $file;
 	}
 ?>

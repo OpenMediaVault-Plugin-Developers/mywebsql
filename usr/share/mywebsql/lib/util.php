@@ -121,7 +121,7 @@
 		$record_limit = Options::get('res-max-count', MAX_RECORD_TO_DISPLAY);
 		// <form element is moved to js, see comments there
 		print "<div id='results'>";
-		print "<table cellspacing=\"0\" width='100%' border=\"0\" class='results postsort' id=\"dataTable\"><thead>\n";
+		print "<table cellspacing=\"0\" width='100%' border=\"0\" class='results' id=\"dataTable\"><thead>\n";
 
 		$f = $db->getFieldInfo();
 
@@ -135,6 +135,7 @@
 				}
 			}
 		}
+
 		// desc command returns table name as COLUMNS, so we make it empty
 		//if (Session::get('select', 'unique_table') == "COLUMNS")
 		//	Session::del('select', 'unique_table');
@@ -142,10 +143,11 @@
 		$ed = Session::get('select', 'can_limit') && (Session::get('select', 'unique_table') == "" ? false : true);// && ($db->numRows() > 0);
 		// ------------ print header -----------
 		print "<tr id=\"fhead\">";
-		print "<th class=\"th tch\">#</th>";
+		print "<th class=\"th tch\"><div>#</div></th>";
 
 		if ($ed)
-			print "<th class=\"th_nosort tch\"><input class=\"check-all\" type=\"checkbox\" onclick=\"resultSelectAll()\" title=\"".__('Select/unselect All records')."\" /></th>";
+			print "<th class=\"th_nosort tch\"><div><input class=\"check-all\" type=\"checkbox\"
+			onclick=\"resultSelectAll()\" title=\"".__('Select/unselect All records')."\" /></div></th>";
 
 		$v = "";
 		// more than one field can be part of a primary key (composite key)
@@ -158,7 +160,7 @@
 		$i = 1;
 		foreach($f as $fn) {
 			$cls = $fn->type == 'numeric' ? "th_numeric" : "th";
-			print "<th nowrap=\"nowrap\" class='$cls'>";
+			print "<th nowrap=\"nowrap\" class='$cls'><div>";
 			if ($fn->pkey == 1) {
 				Session::add('select', 'pkey', $fn->name);
 				print "<span class='pk' title='".__('Primary key column')."'>&nbsp;</span>";
@@ -178,7 +180,7 @@
 
 			$i++;
 
-			print "</th>";
+			print "</div></th>";
 			$fieldNames .= "'" . str_replace("'", "\\'", $fn->name) . "',";
 		}
 
@@ -224,7 +226,7 @@
 		print '<div id="title">'. $gridTitle . '</div>';
 
 		$message = '';
-		if (Session::get('select', 'can_limit')) { // can limit be applied to this type of query (e.g. show,explain)
+		if (Session::get('select', 'can_limit')) { // can limit be applied to this type of query (e.g. show,explain cannot be limited/sorted)
 			if (Session::get('select', 'limit')) {  // yes, and limit is applied to records by the application
 				$total_records = Session::get('select', 'count');
 				$total_pages = ceil($total_records / $record_limit);
@@ -252,12 +254,9 @@
 			$js .= "parent.editKey = ".json_encode(Session::get('select', 'pkey')).";\n";
 		else if (count(Session::get('select', 'ukey')) > 0)
 			$js .= "parent.editKey = ".json_encode(Session::get('select', 'ukey')).";\n";
-		//else if (Session::get('select', 'mkey')) // MUL keys are not unique so can't be trusted for editing
-		//	$js .= "parent.editKey = ".json_encode(Session::get('select', 'mkey')).";\n";
 		else
 			$js .= "parent.editKey = [];\n";
 		$js .= "parent.editTableName = \"" . htmlspecialchars($editTableName)  ."\";\n";
-		//$js .=  "parent.fieldInfo = new Array(" . substr($fieldNames,0,strlen($fieldNames)-1) . ");\n" ;
 		$js .= "parent.fieldInfo = ".$fieldInfo.";\n";
 		$js .= "parent.queryID = '".md5(Session::get('select', 'query'))."';\n";
 		$tm = $db->getQueryTime();
@@ -283,14 +282,15 @@
 		$ed = false;
 		// ------------ print header -----------
 		print "<tr id=\"fhead\">";
-		print "<th class=\"th\">#</th>";
+		print "<th class=\"th\" data-sort=\"numeric\"><div>#</div></th>";
 
 		$v = "";
 
 		foreach($f as $fn) {
 			$cls = $fn->type == 'numeric' ? "th_numeric" : "th";
-			print "<th nowrap=\"nowrap\" class='$cls'>";
-			print $fn->name."</th>";
+			$dsrt = $fn->type == 'numeric' ? "numeric" : "text";
+			print "<th nowrap=\"nowrap\" class='$cls' data-sort=\"$dsrt\"><div>";
+			print $fn->name."</div></th>";
 		}
 
 		print "</tr></thead><tbody>\n";
@@ -386,6 +386,14 @@
 		if ($numQueries == 1) {
 			$formatted_query = preg_replace("/[\\n|\\r]?[\\n]+/", "<br>", htmlspecialchars($query));
 			print "<div class='sql-text ui-state-default'>".$formatted_query."</div>";
+			
+			$warnings = $db->getWarnings();
+			if (count($warnings) > 0) {
+				print '<div class="message ui-state-error">';
+				foreach($warnings as $warning)
+					print htmlspecialchars($warning) . '<br />';
+				print '</div>';
+			}
 		}
 
 		print "</div>";

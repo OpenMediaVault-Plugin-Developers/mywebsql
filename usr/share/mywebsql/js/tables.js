@@ -11,13 +11,14 @@
 var curEditField = null;			// current edited field
 var curEditType = null;
 var fieldInfo = null;				// information about fields in record set
-var editToolbarTimer = null;		// timer for hiding editing toolbar during field editing
 var editOptions = { sortable:true, highlight:true, selectable:true, editEvent:'dblclick', editFunc:editTableCell };
 
 var selectedRow = -1;
 var res_modified = false;			// is the result modified?
 
 var editHorizontal = false;
+
+var editListOpen = false;
 
 // options can include
 // highlight: boolean: highlights row on mouse over
@@ -31,10 +32,12 @@ function setupTable(id, opt) {
 	if (!opt.editEvent) opt.editEvent = 'dblclick';
 	if (!opt.editFunc) opt.editFunc = editTableCell;
 
-	if (opt.sortable == true) {
-		$('#'+id+' thead th').live('click', function() {
-			// only sort if there is more than one row
-			if ( $('#'+id+' tbody tr').length > 2 ) {
+	// only sort if there is more than one row
+	if (opt.sortable && $('#'+id+' tbody tr').length > 2 ) {
+		createTableHeader(id.substr(0,4));
+
+		if (opt.sortable == true) {
+			$('#dataHeader thead th').live('click', function() {
 				if ($(this).attr('class').match(/tch|th_nosort/)) {
 					return true;
 				}
@@ -43,25 +46,24 @@ function setupTable(id, opt) {
 					sort_column--;
 				}
 				goSort(sort_column);
-			}
-		});
-	} else if (opt.sortable == 'inline') {
-		sorttable.DATE_RE = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
-		table = document.getElementById(id);
-		sorttable.makeSortable(table);
+			});
+		} else if (opt.sortable == 'inline') {
+			var DATE_RE = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
+			$("#"+id).sorttable();
+		}
 	}
 
 	if (opt.highlight) {
-		$('#'+id+' tbody tr').live('mouseenter', function() {
+		$('#'+id+' > tbody > tr').live('mouseenter', function() {
 			$(this).addClass("ui-state-hover");
 		});
-		$('#'+id+' tbody tr').live('mouseleave', function() {
+		$('#'+id+' > tbody > tr').live('mouseleave', function() {
 			$(this).removeClass('ui-state-hover');
 		});
 	}
 
 	if (opt.selectable) {
-		$('#'+id+' tbody tr').live('click', function() {
+		$('#'+id+' > tbody > tr').live('click', function() {
 			if (selectedRow != null)
 				$(selectedRow).removeClass('ui-state-active');
 			$(this).addClass("ui-state-active");
@@ -81,12 +83,6 @@ function setupTable(id, opt) {
 }
 
 function editTableCell() {
-	// avoid flickers in showing/hiding toolbar when navigating between result set fields
-	if (editToolbarTimer) {
-		window.clearTimeout(editToolbarTimer);
-		editToolbarTimer = null;
-	}
-
 	td = $(this);
 	if (curEditField != null)
 		closeEditor(true);
@@ -110,15 +106,7 @@ function editTableCell() {
 	if(input) {
 		setTimeout( function() {
 			input.focus();
-
-			// bring element into view if the current edit is out of screen
 			td.ensureVisible($("#results-div"), editHorizontal);
-			if (document.getElementById('editToolbar')) {
-				$("#editToolbar span.fname").text(fi["name"]);
-				type = fi["autoinc"] ? "Auto Increment" : fi["type"];
-				$("#editToolbar span.ftype").text(type);
-				$("#editToolbar").show().position({ of: td, my: "left bottom", at: "left top", offset: 0 });
-			}
 		}, 50 );
 	}
 }
@@ -187,9 +175,9 @@ function closeEditor(upd, value) {
 
 	if (curEditType == 'text')
 		$('#inplace-text').hide();
-
-	if (document.getElementById('editToolbar'))
-		editToolbarTimer = window.setTimeout(function() { document.getElementById('editToolbar').style.display = "none"; editToolbarTimer=null; }, 100 );
+		
+	editListOpen = false;
+	resizeTableHeader('data');
 }
 
 function checkEditField(event) {
@@ -221,8 +209,8 @@ function checkEditField(event) {
 	}
 	else if (event.keyCode == 27)
 		closeEditor(false);
-	/*else if ($(this).attr('readonly') != '' && [16,17,18].indexOf(event.keyCode) == -1 ) {
-	   // focus is on a blob editor, need to open dialog for any keypress
+	/*else if ($(this).attr('readonly') != '' && event.keyCode == 32 ) {
+	   // focus is on a blob editor, need to open dialog for blob editing
 		oldEditField = curEditField;
 		closeEditor(false);
 		$(oldEditField).find('span.blob').click();
@@ -236,7 +224,7 @@ function createCellEditor(td, fi, txt, w, h, align) {
 	code = '<form name="cell_editor_form" class="cell_editor_form" action="javascript:void(0);">';
 	if (fi['blob'] == 1) {
 		if (fi['type'] == 'binary') {
-			code += '<input type="text" readonly="readonly" name="cell_editor" class="cell_editor" style="text-align:' + align + ';width: ' + w + 'px;" />';
+			code += '<input type="text" readonly="readonly" name="cell_editor" class="cell_editor" style="text-align:' + align + ';width: ' + (w-2) + 'px;" />';
 			code += '</form>';
 			td.find('span.i').html(code);
 			input = td.find('input');
@@ -301,15 +289,92 @@ function createCellEditor(td, fi, txt, w, h, align) {
 	else {
 		switch(fi['type']) {
 			default:
-				code += '<input type="text" name="cell_editor" class="cell_editor" style="text-align:' + align + ';width: ' + w + 'px;" />';
+				code += '<input type="text" name="cell_editor" class="cell_editor" style="text-align:' + align + ';width: ' + (w-2) + 'px;" />';
+				if( fi['list'] && fi['list'].length > 0 ) {
+					code += '<a href="javascript:void(0)" class="cell_editlist">&#x25BE;</a>';
+				} else if ( fi['type']  && ( fi['type'] == "datetime" || fi['type'] == "date" ) ) {
+					code += '<div class="dp"></div><a href="javascript:void(0)" class="cell_editlist">&#x25BE;</a>;';
+				}
 				code += '</form>';
 				td.html(code);
 				input = td.find('input');
-				input.val(txt).select().bind(keyEvent, checkEditField ).blur( function() { closeEditor(true); } );
+				input.val(txt).select().bind(keyEvent, checkEditField ).blur( function(e) { if (!editListOpen) closeEditor(true); } );
+				if( fi['list'] && fi['list'].length > 0 ) {
+					$(".cell_editor").css({width:(w-20)+'px'}).autocomplete({
+						minLength: 0,
+						source: fi['list'],
+						open: function( event, ui ) { $(".cell_editor").autocomplete( "widget" ).css({width:(w>160?w-2:160)+"px"}); },
+						close: function( event, ui ) { $(".cell_editor").focus(); editListOpen = false; }
+					});
+					$(".cell_editlist").mousedown(function(e) {
+						e.preventDefault();
+						editListOpen = true;
+						$(".cell_editor").focus().autocomplete("search", "");
+						return false;
+					});
+				} else if ( fi['type']  && ( fi['type'] == "datetime" || fi['type'] == "date" ) ) {
+					$(".cell_editor").css({width:(w-20)+'px'});
+					$(".dp").datepicker({
+						dateFormat:"yy-mm-dd",
+						changeMonth: true,
+						changeYear: true,
+						onSelect: function(d, o) {
+							$(".dp").fadeOut(300);
+							d += $(".cell_editor").data("datetime");
+							$(".cell_editor").val(d).focus();
+							editListOpen = false;
+						}
+					});
+					$(".cell_editlist").mousedown(function(e) {
+						e.preventDefault();
+						editListOpen = true;
+						var d = $(".cell_editor").val();
+						$(".cell_editor").data("datetime", d.substr(10));
+						$(".dp").datepicker("setDate", d.substr(0, 10));
+						$(".dp").fadeIn(300);
+						$(".cell_editor").focus();
+						return false;
+					});
+				}
 				break;
 		}
 	}
 	return input;
+}
+
+function createTableHeader(name) {
+	var table = "#" + name + "Table";
+	if ($(table + ' tbody tr').length <= 2)
+		return;
+
+	var header = "#" + name + "Header";
+	var div = name == "data" ? '#results-div' : "#info-div";
+	$(header).remove(); // just in case we have it created and not yet destroyed
+	var tableHeader = $(table).clone();
+	tableHeader.find('tbody').remove();
+	tableHeader.attr('id', name + "Header").appendTo(div);
+
+	$(div).scroll(function () {
+		var t = parseInt($(this).scrollTop());
+		tableHeader.css({top: t + 'px'})
+	});
+	
+}
+
+function resizeTableHeader(name) {
+	var table = "#" + name + "Table";
+	if ($(table + ' tbody tr').length <= 2)
+		return;
+		
+	var header = "#" + name + "Header";
+	var tableHeader = $(header);
+	tableHeader.width($(table).width());
+	var ths = $(table + " thead th");
+	var l = ths.length;
+	for (i = 0; i < l; i++) {
+		var w = $(ths[i]).width();
+		tableHeader.find("thead th").eq(i).width(w);
+	}
 }
 
 $.fn.ensureVisible = function(el, horiz) {
@@ -358,3 +423,127 @@ $.fn.setSearchFilter = function(text) {
 		});
 	}
 };
+
+/* Quick inline sorttable
+	based on the 'stupid-table' jQuery plugin by joequery
+*/
+
+(function($) {
+
+  $.fn.sorttable = function(sortFns) {
+    return this.each(function() {
+      var $table = $(this);
+		var $header = $ ("#" + $table.attr('id').replace("Table", "Header"));
+      sortFns = sortFns || {};
+
+      // Merge sort functions with some default sort functions.
+      sortFns = $.extend({}, $.fn.sorttable.default_sort_fns, sortFns);
+
+      $header.on("click.sorttable", "thead th", function() {
+        var $this = $(this);
+        var th_index = 0;
+        var dir = $.fn.sorttable.dir;
+
+        // Account for colspans
+        $this.parents("tr").find("th").slice(0, $this.index()).each(function() {
+          var cols = $(this).attr("colspan") || 1;
+          th_index += parseInt(cols,10);
+        });
+
+        // Determine (and/or reverse) sorting direction, default `asc`
+        var sort_dir = $this.data("sort-default") || dir.ASC;
+        if ($this.data("sort-dir"))
+           sort_dir = $this.data("sort-dir") === dir.ASC ? dir.DESC : dir.ASC;
+
+        // Choose appropriate sorting function.
+        var type = $this.data("sort") || null;
+
+        // Prevent sorting if no type defined
+        if (type === null) {
+          return;
+        }
+
+        // Trigger `beforetablesort` event that calling scripts can hook into;
+        // pass parameters for sorted column index and sorting direction
+        $table.trigger("beforetablesort", {column: th_index, direction: sort_dir});
+        // More reliable method of forcing a redraw
+        $table.css("display");
+
+        // Run sorting asynchronously on a timout to force browser redraw after
+        // `beforetablesort` callback. Also avoids locking up the browser too much.
+        setTimeout(function() {
+          // Gather the elements for this column
+          var column = [];
+          var sortMethod = sortFns[type];
+          var trs = $table.children("tbody").children("tr");
+
+          // Extract the data for the column that needs to be sorted and pair it up
+          // with the TR itself into a tuple
+          trs.each(function(index,tr) {
+            var $e = $(tr).children().eq(th_index);
+            var sort_val = $e.data("sort-value");
+            var order_by = typeof(sort_val) !== "undefined" ? sort_val : $e.text();
+            column.push([order_by, tr]);
+          });
+
+          // Sort by the data-order-by value
+          column.sort(function(a, b) { return sortMethod(a[0], b[0]); });
+          if (sort_dir != dir.ASC)
+            column.reverse();
+
+          // Replace the content of tbody with the sorted rows. Strangely (and
+          // conveniently!) enough, .append accomplishes this for us.
+          trs = $.map(column, function(kv) { return kv[1]; });
+          $table.children("tbody").append(trs);
+
+          // Reset siblings
+          $table.find("th").data("sort-dir", null).removeClass("sorting-desc sorting-asc");
+          $this.data("sort-dir", sort_dir).addClass("sorting-"+sort_dir);
+			 $this.parent().find("span").remove();
+			 $table.find("thead span").remove();
+			 $this.find("div").append( sort_dir == dir.ASC ? "<span>&nbsp;&#x25B4;<span>" : "<span>&nbsp;&#x25BE;<span>");
+			 $table.find("thead th:eq("+th_index+") div").append( sort_dir == dir.ASC ? "<span>&nbsp;&#x25B4;<span>" : "<span>&nbsp;&#x25BE;<span>");
+			 resizeTableHeader('info');
+
+          // Trigger `aftertablesort` event. Similar to `beforetablesort`
+          $table.trigger("aftertablesort", {column: th_index, direction: sort_dir});
+          // More reliable method of forcing a redraw
+          $table.css("display");
+        }, 10);
+      });
+    });
+  };
+
+  // Enum containing sorting directions
+  $.fn.sorttable.dir = {ASC: "asc", DESC: "desc"};
+
+  $.fn.sorttable.default_sort_fns = {
+    "numeric": function(a, b) {
+		if (a != "NULL" && b != "NULL")
+			return parseInt(a, 10) - parseInt(b, 10);
+		if (a == "NULL")
+			return -1;
+		return 1;
+    },
+    "float": function(a, b) {
+		if (a != "NULL" && b != "NULL")
+			return parseFloat(a) - parseFloat(b);
+		if (a == "NULL")
+			return -1;
+		return 1;
+    },
+    "text": function(a, b) {
+		if (a != "NULL" && b != "NULL")
+			return a.localeCompare(b);
+		if (a == "NULL")
+			return -1;
+		return 1;
+    },
+    "text-ins": function(a, b) {
+      a = a.toLocaleLowerCase();
+      b = b.toLocaleLowerCase();
+      return a.localeCompare(b);
+    }
+  };
+
+})(jQuery);

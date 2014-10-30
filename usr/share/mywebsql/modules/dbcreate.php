@@ -14,7 +14,7 @@
 		Session::del('select', 'ukey');
 		Session::del('select', 'mkey');
 		Session::del('select', 'unique_table');
-		
+
 		Session::set('select', 'result', array());
 
 		$dbName = $_REQUEST["name"];

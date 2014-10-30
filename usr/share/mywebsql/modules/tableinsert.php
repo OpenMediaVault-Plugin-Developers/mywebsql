@@ -13,7 +13,7 @@
 		$tbl = $_REQUEST["name"];
 
 		$str = $db->getInsertStatement($tbl);
-			
+
 		if ($str === false)
 			createErrorGrid($db, $db->getLastQuery());
 		else {

@@ -17,7 +17,7 @@
 
 		$scripts = "jquery";
 		$extraScript = "";
-		
+
 		if (secureLoginPage()) {
 			$scripts = "jquery,encrypt";
 			$e = Session::get('auth_enc', 'e');
