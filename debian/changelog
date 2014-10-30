@@ -1,3 +1,9 @@
+mywebsql (3.6-omv1) stable; urgency=low
+
+  * Update to mywebsql 3.6
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Thu, 30 Oct 2014 05:39:12 -0500
+
 mywebsql (3.5-omv1) stable; urgency=low
 
   * Update to mywebsql 3.5
