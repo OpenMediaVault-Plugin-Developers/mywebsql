@@ -1,3 +1,9 @@
+mywebsql (3.6-omv2) stable; urgency=low
+
+  * Add postgresql plugin as dependency
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Sat, 07 Feb 2015 14:25:59 -0600
+
 mywebsql (3.6-omv1) stable; urgency=low
 
   * Update to mywebsql 3.6
