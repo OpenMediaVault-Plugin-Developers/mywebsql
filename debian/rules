@@ -1,37 +1,17 @@
 #!/usr/bin/make -f
 
-include ./openmediavault.mk
+%:
+	dh $@
 
-PLUGIN_NAME=mywebsql
+override_dh_install:
+	# Remove useless licences, documentation, tests, scripts and sources
+	dh_install \
+		-X.git \
+		-XREADME.md \
+		-Xreadme.txt \
+		-Xmywebsql/Docs \
+		-Xmywebsql/install.php
 
-clean:
-	dh_testdir
-	dh_testroot
-	dh_clean
-
-install:
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-	dh_install
-
-binary-indep: install omv_clean_scm
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_installdebconf
-	dh_lintian
-	dh_link
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary-arch:
-# We have nothing to do by default.
-
-binary: binary-indep binary-arch
-.PHONY: clean binary-indep binary-arch binary install
+get-orig-source:
+	# Should we add --download-current-version here?
+	uscan --force --verbose --rename --repack

@@ -1,8 +1,8 @@
-Format: http://dep.debian.net/deps/dep5
-Upstream-Contact: OpenMediaVault Plugin Developers <plugins@omv-extras.org>
-Source: https://github.com/OpenMediaVault-Plugin-Developers/mywebsql
-Copyright: 2014 OpenMediaVault Plugin Developers <plugins@omv-extras.org>
-License: GPL-3
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: MyWebSQL
+Source: http://sourceforge.net/projects/mywebsql/files/
 
-Files: /usr/share/mywebsql/*
-Copyright: mywebsql.net <http://mywebsql.net>
+Files: mywebsql/*
+Copyright: 2008-2014 Samnan ur Rehman
+License: GPL-3
+ /usr/share/common-licenses/GPL-3

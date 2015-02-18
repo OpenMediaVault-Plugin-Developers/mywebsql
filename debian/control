@@ -2,15 +2,18 @@ Source: mywebsql
 Section: net
 Priority: optional
 Maintainer: OpenMediaVault Plugin Developers <plugins@omv-extras.org>
-Build-Depends: debhelper (>= 9.0.0)
-Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
 
 Package: mywebsql
 Architecture: all
-Depends: ${misc:Depends}, openmediavault (>= 1.12),
- openmediavault-mysql (>= 1.0.5) | openmediavault-postgresql (>= 1.0)
+Depends: php5,
+         php5-mysqlnd,
+         php5-pgsql,
+         php5-sqlite,
+         ${misc:Depends}
 Priority: optional
-Description: MyWebSQL
- MyWebSql is an open source, web based, WYSIWYG mysql client written in PHP. It
- utilizes modern day technologies and browsers to provide a fast, intuitive querying
- and editing interface to the mysql databases.
+Description: Web-based database manager for MySQL, SQLite and PostgreSQL.
+ MyWebSQL is an open source, web based, WYSIWYG mysql client written in PHP. It
+ utilizes modern day technologies and browsers to provide a fast, intuitive
+ querying and editing interface to the MySQL databases.
