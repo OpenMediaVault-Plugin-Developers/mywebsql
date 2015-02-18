@@ -4,7 +4,7 @@
 	dh $@
 
 override_dh_install:
-	# Remove useless licences, documentation, tests, scripts and sources
+	# Remove useless documentation, scripts and sources.
 	dh_install \
 		-XREADME.md \
 		-Xreadme.txt \
