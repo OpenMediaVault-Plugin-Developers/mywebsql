@@ -6,10 +6,11 @@
 override_dh_install:
 	# Remove useless licences, documentation, tests, scripts and sources
 	dh_install \
-		-X.git \
 		-XREADME.md \
 		-Xreadme.txt \
+		-Xmywebsql/backups \
 		-Xmywebsql/Docs \
+		-Xmywebsql/tmp \
 		-Xmywebsql/install.php
 
 get-orig-source:
