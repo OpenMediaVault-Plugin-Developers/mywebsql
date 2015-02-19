@@ -1,1 +1,13 @@
-mywebsql/* usr/share/mywebsql
+# Directories (static)
+# Should config be installed to /etc/mywebsql instead?
+config usr/share/mywebsql
+img usr/share/mywebsql
+js usr/share/mywebsql
+lang usr/share/mywebsql
+lib usr/share/mywebsql
+modules usr/share/mywebsql
+themes usr/share/mywebsql
+
+# Files
+*.ico usr/share/mywebsql
+*.php usr/share/mywebsql
