@@ -2,7 +2,7 @@ Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: MyWebSQL
 Source: http://sourceforge.net/projects/mywebsql/files/
 
-Files: mywebsql/*
+Files: *
 Copyright: 2008-2014 Samnan ur Rehman
 License: GPL-3
  /usr/share/common-licenses/GPL-3
