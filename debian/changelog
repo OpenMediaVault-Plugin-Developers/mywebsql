@@ -1,3 +1,11 @@
+mywebsql (3.6-3) stable; urgency=medium
+
+  * Improved packaging.
+  * MyWebSQL backups path is moved to /var/lib/mywebsql/backups.
+  * Dropped dependencies on openmediavault packages.
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Thu, 19 Feb 2015 20:31:04 +0100
+
 mywebsql (3.6-omv2) stable; urgency=low
 
   * Add postgresql plugin as dependency
