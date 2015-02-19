@@ -1,0 +1,29 @@
+--- a/mywebsql/config/servers.php
++++ b/mywebsql/config/servers.php
+@@ -37,24 +37,9 @@
+ 		                             'host'     => 'localhost',
+ 		                             'driver'   => extension_loaded('mysqli') ? 'mysqli' : 'mysql5'
+ 		                         ),
+-		'SQLite Databases'          => array(
+-		                             'host'     => 'c:/sqlitedb/',
+-		                             'driver'   => 'sqlite3',
+-		                             'user'     => 'root',    // set this yourself
+-		                             'password' => 'sqlite'  // set this yourself
+-		                         ),
+  		'Localhost PostgreSQL'     => array(
+ 		                             'host'     => 'localhost',
+ 		                             'driver'   => 'pgsql'
+ 		                         ),
+-		/*'MySQL Proxy Server'  => array(
+-		                             'host'     => 'localhost:4040',
+-		                             'driver'   => 'mysql5'
+-		                         ),
+-		'MySQL 4'             => array(
+-		                             'host'     => 'localhost',
+-		                             'driver'   => 'mysql4'
+-		                         ),
+-		*/
+ 	);
+-?>
+\ No newline at end of file
++?>

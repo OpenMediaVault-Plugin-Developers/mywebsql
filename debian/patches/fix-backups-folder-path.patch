@@ -1,0 +1,18 @@
+--- a/mywebsql/config/backups.php
++++ b/mywebsql/config/backups.php
+@@ -12,7 +12,7 @@
+ 
+ 	// the folder on server where the backups should be saved ( default = './backups/' )
+ 	// make sure it contains trailing slash
+-	define( 'BACKUP_FOLDER', BASE_PATH . '/backups/' );
++	define( 'BACKUP_FOLDER', '/var/lib/mywebsql/backups/' );
+ 
+ 	// back up filename format
+ 	// (extension will be added automatically based on the type of output format)
+@@ -25,4 +25,4 @@
+ 
+ 	// date format to be used in the backup filename (see php manual for format specifiers)
+ 	define( 'BACKUP_DATE_FORMAT', 'Ymd-His' );
+-?>
+\ No newline at end of file
++?>

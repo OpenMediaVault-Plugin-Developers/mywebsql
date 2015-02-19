@@ -4,8 +4,8 @@ set -e
 
 case "$1" in
     purge)
-        if [ ! -d /usr/share/mywebsql ]; then
-            rm -r /usr/share/mywebsql
+        if [ ! -d /var/lib/mywebsql ]; then
+            rm -r /var/lib/mywebsql
         fi
     ;;
 

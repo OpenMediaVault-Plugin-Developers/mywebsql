@@ -14,9 +14,8 @@ override_dh_install:
 override_dh_fixperms:
 	dh_fixperms -X var/lib/mywebsql
 	# Make sure MyWebSQL can write in these directories.
-	for i in backup ; do \
-		chown www-data:www-data debian/mywebsql/var/lib/mywebsql/$$i && \
-		chmod 2770 debian/mywebsql/var/lib/mywebsql/$$i ; \
+	for i in backups ; do \
+		chown www-data:www-data debian/mywebsql/var/lib/mywebsql/$$i ; \
 	done
 
 get-orig-source:
