@@ -1,4 +1,4 @@
-mywebsql (3.6-3) stable; urgency=medium
+mywebsql (3.6-omv3) stable; urgency=medium
 
   * Improved packaging.
   * MyWebSQL backups path is moved to /var/lib/mywebsql/backups.
