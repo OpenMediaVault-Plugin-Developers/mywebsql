@@ -3,12 +3,15 @@
 *.bak
 *.swp
 *~
+
 # SVN
 .svn/
+
 # Mac
 .DS_Store
 .AppleDouble
 .LSOverride
+
 # Windows
 Thumbs.db
 ehthumbs.db
@@ -24,5 +27,5 @@ debian/*substvars
 # Quilt
 .pc
 
-# Source
-mywebsql/
+# Source and package files
+/mywebsql*

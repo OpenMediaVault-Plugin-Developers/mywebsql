@@ -1,12 +1,13 @@
 #!/usr/bin/make -f
 
+ORIG_SOURCE_DESTDIR=$(CURDIR)/..
+
 %:
 	dh $@
 
 override_dh_install:
-	# Remove useless documentation, scripts and sources.
+	# Remove unnecessary documentation, scripts and sources.
 	dh_install \
-		--sourcedir=mywebsql \
 		-XREADME.md \
 		-Xreadme.txt \
 		-Xinstall.php
@@ -14,10 +15,9 @@ override_dh_install:
 override_dh_fixperms:
 	dh_fixperms -X var/lib/mywebsql
 	# Make sure MyWebSQL can write in these directories.
-	for i in backups ; do \
-		chown www-data:www-data debian/mywebsql/var/lib/mywebsql/$$i ; \
+	for i in backups; do \
+		chown www-data:www-data debian/mywebsql/var/lib/mywebsql/$$i; \
 	done
 
 get-orig-source:
-	# Should we add --download-current-version here?
-	uscan --force --verbose --rename --repack
+	uscan --force --verbose --rename --repack --download-current-version --destdir=$(ORIG_SOURCE_DESTDIR)
