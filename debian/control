@@ -7,10 +7,10 @@ Standards-Version: 3.9.6
 
 Package: mywebsql
 Architecture: all
-Depends: php5,
-         php5-mysqlnd,
-         php5-pgsql,
-         php5-sqlite,
+Depends: php,
+         php7.0-mysql,
+         php7.0-pgsql,
+         php7.0-sqlite3,
          ${misc:Depends}
 Priority: optional
 Description: Web-based database manager for MySQL, SQLite and PostgreSQL.
